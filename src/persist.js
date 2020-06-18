@@ -51,6 +51,18 @@ function downloadFile(text, name) {
   dummyElement.remove();
 }
 
+function downloadFileApple(text, name) {
+  var fileReader = new FileReader();
+  fileReader.onload = function(e) {
+    window.location.href = fileReader.result;
+  }
+  fileReader.readAsDataURL(new Blob([text]), { type: 'octet/stream' });
+}
+
 export function downloadFormDataAsCsv() {
-  downloadFile(serializeDataToCsv(), 'Results.csv');
+  if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+    downloadFileApple(serializeDataToCsv(), 'Results.csv');
+  } else {
+    downloadFile(serializeDataToCsv(), 'Results.csv');
+  }
 }
